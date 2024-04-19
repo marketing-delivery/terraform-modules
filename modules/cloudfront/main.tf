@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "weather_site" {
     default_ttl          = 3600
     max_ttl              = 86400
 
-    response_headers_policy_id = module.security_headers_policy.id
+    response_headers_policy_id = var.response_headers_policy_id
     
     forwarded_values {
       query_string = false
