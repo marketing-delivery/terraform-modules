@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 # certificate
-data "aws_acm_certificate" "weather_cert" {
+data "aws_acm_certificate" "this" {
   domain      = var.domain
   statuses    = ["ISSUED", "PENDING_VALIDATION"]
   most_recent = true
@@ -19,7 +19,7 @@ resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
 # Define the CloudFront distribution
 resource "aws_cloudfront_distribution" "weather_site" {
   origin {
-    domain_name = module.weather_bucket.bucket_regional_domain_name
+    domain_name = var.bucket_regional_domain_name
     origin_id   = "S3-Website"
 
     s3_origin_config {
@@ -55,7 +55,7 @@ resource "aws_cloudfront_distribution" "weather_site" {
   price_class = "PriceClass_100"
 
   viewer_certificate {
-    acm_certificate_arn = data.aws_acm_certificate.weather_cert.arn
+    acm_certificate_arn = data.aws_acm_certificate.this.arn
     ssl_support_method  = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -76,7 +76,7 @@ resource "aws_cloudfront_distribution" "weather_site" {
   tags = merge(var.tags, { "Name" = var.domain })
 }
 
-resource "aws_s3_bucket_policy" "weather_policy" {
+resource "aws_s3_bucket_policy" "this" {
   bucket = var.bucket_id
 
   policy = jsonencode({
