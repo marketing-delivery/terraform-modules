@@ -15,5 +15,5 @@ variable "bucket_arn" {
 }
 
 variable "response_headers_policy_id" {
-  
+  default = null
 }
