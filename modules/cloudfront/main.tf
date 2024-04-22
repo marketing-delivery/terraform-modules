@@ -30,6 +30,7 @@ resource "aws_cloudfront_distribution" "this" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
+  web_acl_id = var.web_acl_id
 
   aliases = [var.domain]
 
