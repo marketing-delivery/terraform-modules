@@ -13,7 +13,7 @@ data "aws_acm_certificate" "this" {
 }
 
 resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
-  comment = "CloudFront Origin Access Identity for accessing S3 bucket"
+  comment = "access-identity-${var.domain}.s3.amazonaws.com"
 }
 
 # Define the CloudFront distribution
