@@ -17,7 +17,7 @@ resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
 }
 
 # Define the CloudFront distribution
-resource "aws_cloudfront_distribution" "weather_site" {
+resource "aws_cloudfront_distribution" "this" {
   origin {
     domain_name = var.bucket_regional_domain_name
     origin_id   = "S3-Website"
