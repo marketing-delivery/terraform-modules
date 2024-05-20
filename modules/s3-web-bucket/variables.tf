@@ -7,5 +7,5 @@ variable "tags" {
 }
 
 variable "has_random_suffix" {
-  
+  default = false
 }
