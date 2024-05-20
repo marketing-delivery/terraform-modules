@@ -4,7 +4,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# certificate
+# If a domain is specified then check for it's certificate
 data "aws_acm_certificate" "this" {
   count      = var.domain != "" ? 1 : 0
   domain      = var.domain
@@ -35,7 +35,14 @@ resource "aws_cloudfront_distribution" "this" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  web_acl_id = var.web_acl_id
+
+  # Optionally add the web_acl_id if it's specified
+  dynamic "web_acl_id" {
+    for_each = var.web_acl_id != "" ? [var.web_acl_id] : []
+    content {
+      web_acl_id = var.web_acl_id
+    }
+  }
 
   aliases = [var.domain]
 
