@@ -6,6 +6,7 @@ provider "aws" {
 
 # certificate
 data "aws_acm_certificate" "this" {
+  count      = var.domain != "" ? 1 : 0
   domain      = var.domain
   statuses    = ["ISSUED", "PENDING_VALIDATION"]
   most_recent = true
@@ -14,6 +15,10 @@ data "aws_acm_certificate" "this" {
 
 resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
   comment = "access-identity-${var.domain}.s3.amazonaws.com"
+}
+
+locals {
+  certificate_arn = var.domain != "" ? data.aws_acm_certificate.this[0].arn : ""
 }
 
 # Define the CloudFront distribution
@@ -56,7 +61,7 @@ resource "aws_cloudfront_distribution" "this" {
   price_class = "PriceClass_100"
 
   viewer_certificate {
-    acm_certificate_arn = data.aws_acm_certificate.this.arn
+    acm_certificate_arn = local.certificate_arn
     ssl_support_method  = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }

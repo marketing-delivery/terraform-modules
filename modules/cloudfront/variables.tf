@@ -3,6 +3,7 @@ variable "tags" {
 }
 
 variable "domain" {
+  default = ""
   
 }
 
