@@ -19,6 +19,7 @@ resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
 
 locals {
   certificate_arn = var.domain != "" ? data.aws_acm_certificate.this[0].arn : ""
+  aliases = var.domain != "" ? [var.domain] : []
 }
 
 # Define the CloudFront distribution
@@ -39,13 +40,7 @@ resource "aws_cloudfront_distribution" "this" {
   # Optionally add the web_acl_id if it's specified
   web_acl_id = var.web_acl_id != "" ? var.web_acl_id : null
 
-  dynamic "aliases" {
-    for_each = var.domain != "" ? [1] : []
-    content {
-      quantity = 1
-      items    = [var.domain]
-    }
-  }
+  aliases = local.aliases
 
   default_cache_behavior {
     allowed_methods      = ["GET", "HEAD", "OPTIONS"]
