@@ -39,7 +39,13 @@ resource "aws_cloudfront_distribution" "this" {
   # Optionally add the web_acl_id if it's specified
   web_acl_id = var.web_acl_id != "" ? var.web_acl_id : null
 
-  aliases = [var.domain]
+  dynamic "aliases" {
+    for_each = var.domain != "" ? [1] : []
+    content {
+      quantity = 1
+      items    = [var.domain]
+    }
+  }
 
   default_cache_behavior {
     allowed_methods      = ["GET", "HEAD", "OPTIONS"]
