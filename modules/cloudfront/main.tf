@@ -37,12 +37,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = "index.html"
 
   # Optionally add the web_acl_id if it's specified
-  dynamic "web_acl_id" {
-    for_each = var.web_acl_id != "" ? [var.web_acl_id] : []
-    content {
-      web_acl_id = var.web_acl_id
-    }
-  }
+  web_acl_id = var.web_acl_id != "" ? var.web_acl_id : null
 
   aliases = [var.domain]
 
