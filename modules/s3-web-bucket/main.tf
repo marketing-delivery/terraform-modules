@@ -9,7 +9,7 @@ resource "random_string" "suffix" {
 }
 
 locals{
-  name = var.has_random_suffix == true ? "${var.name}_${random_string.suffix.id}" : var.name
+  name = var.has_random_suffix == true ? "${var.name}-${random_string.suffix.id}" : var.name
 }
 
 resource "aws_s3_bucket" "this" {
