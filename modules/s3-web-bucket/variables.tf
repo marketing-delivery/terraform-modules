@@ -5,3 +5,7 @@ variable "name" {
 variable "tags" {
   description = "tags applied to the bucket"
 }
+
+variable "has_random_suffix" {
+  
+}
