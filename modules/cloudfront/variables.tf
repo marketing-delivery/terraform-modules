@@ -15,6 +15,11 @@ variable "bucket_arn" {
   
 }
 
+variable "providers" {
+  description = "Map of providers to use"
+  type        = map(any)
+}
+
 variable "bucket_regional_domain_name" {
   
 }

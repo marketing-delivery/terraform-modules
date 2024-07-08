@@ -1,16 +1,10 @@
-# CloudFront certs need to be in us-east-1
-provider "aws" {
-  alias = "virginia"
-  region = "us-east-1"
-}
-
 # If a domain is specified then check for it's certificate
 data "aws_acm_certificate" "this" {
   count      = var.domain != "" ? 1 : 0
   domain      = var.domain
   statuses    = ["ISSUED", "PENDING_VALIDATION"]
   most_recent = true
-  provider = aws.virginia
+  provider   = var.providers.aws.virginia
 }
 
 resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
