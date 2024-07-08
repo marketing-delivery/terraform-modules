@@ -3,7 +3,7 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.32.1"
-      configuration_aliases = [ aws.home, aws.global ]
+      configuration_aliases = [ aws.virginia ]
     }
   }
 }
@@ -11,7 +11,7 @@ terraform {
 # If a domain is specified then check for it's certificate
 data "aws_acm_certificate" "this" {
   count       = var.domain != "" ? 1 : 0
-  provider    = aws.global
+  provider    = aws.virginia
   domain      = var.domain
   statuses    = ["ISSUED", "PENDING_VALIDATION"]
   most_recent = true
@@ -40,7 +40,6 @@ resource "aws_cloudfront_distribution" "this" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  provider = aws.global
 
   # Optionally add the web_acl_id if it's specified
   web_acl_id = var.web_acl_id != "" ? var.web_acl_id != "null" ? var.web_acl_id : null : null
@@ -93,7 +92,6 @@ resource "aws_cloudfront_distribution" "this" {
 
 resource "aws_s3_bucket_policy" "this" {
   bucket = var.bucket_id
-  provider = aws.home
 
   policy = jsonencode({
     "Version": "2012-10-17",
