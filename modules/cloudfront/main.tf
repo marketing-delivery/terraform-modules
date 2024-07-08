@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.32.1"
+    }
+  }
+}
+
 # If a domain is specified then check for it's certificate
 data "aws_acm_certificate" "this" {
   count      = var.domain != "" ? 1 : 0
