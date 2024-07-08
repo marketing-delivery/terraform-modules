@@ -4,7 +4,6 @@ data "aws_acm_certificate" "this" {
   domain      = var.domain
   statuses    = ["ISSUED", "PENDING_VALIDATION"]
   most_recent = true
-  provider   = var.providers.aws.virginia
 }
 
 resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
