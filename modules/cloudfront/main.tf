@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = "index.html"
 
   # Optionally add the web_acl_id if it's specified
-  web_acl_id = var.web_acl_id != "" ? var.web_acl_id != "null" ? var.web_acl_id : null : null
+  web_acl_id = var.web_acl_id != "" ? var.web_acl_id : null
 
   aliases = local.aliases
 
