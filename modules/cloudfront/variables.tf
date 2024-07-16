@@ -27,3 +27,14 @@ variable "web_acl_id" {
 variable "response_headers_policy_id" {
   default = null
 }
+
+variable "custom_error_responses" {
+  description = "Custom error responses configuration"
+  type = list(object({
+    error_caching_min_ttl = number
+    error_code            = number
+    response_code         = number
+    response_page_path    = string
+  }))
+  default = []
+}
