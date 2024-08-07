@@ -56,6 +56,15 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl              = 86400
 
     response_headers_policy_id = var.response_headers_policy_id
+
+    dynamic "lambda_function_association" {
+      for_each = var.lambda_arn == "" ? [] : [1]
+      content {
+        event_type   = "viewer-request"
+        lambda_arn   = var.lambda_arn
+        include_body = false
+      }
+    }
     
     forwarded_values {
       query_string = false
