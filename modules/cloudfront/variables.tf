@@ -13,6 +13,7 @@ variable "bucket_id" {
 
 variable "lambda_arn" {
   description = "lambda_arn on the lambda_function_association for the aws_cloudfront_distribution resource"
+  default = ""
 }
 
 variable "bucket_arn" {
