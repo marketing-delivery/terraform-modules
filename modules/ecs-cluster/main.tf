@@ -56,7 +56,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_cloudwatch"
 }
 
 resource "aws_iam_role" "service-role" {
-  name = "ecs-default-service-role"
+  name = "${var.name}-service-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [{
