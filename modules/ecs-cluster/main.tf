@@ -31,7 +31,7 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_iam_role" "task_execution_role" {
-  name = "ecs-task-execution-role"
+  name = "${var.name}-task-execution-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [{
