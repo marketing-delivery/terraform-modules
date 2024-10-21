@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "this" {
             "awslogs-create-group"  = "true"
         }
       }
-      environment = [
+      environment = concat([
         {
             "name": "ASPNETCORE_HTTP_PORTS"
             "value": tostring(var.container_port)
@@ -35,16 +35,9 @@ resource "aws_ecs_task_definition" "this" {
         {
             "name": "DOTNET_RUNNING_IN_CONTAINER"
             "value": "true"
-        },
-        {
-            "name": "DOTNET_VERSION"
-            "value": "8.0.3"
-        },
-        {
-            "name": "ASPNET_VERSION"
-            "value": "8.0.3"
-        },
-      ]
+        }
+      ],
+      [for k, v in var.environment_variables : { name = k, value = v }])
       healthCheck = {
             command = [
                 "CMD-SHELL",
