@@ -3,8 +3,8 @@ resource "aws_ecs_task_definition" "this" {
   family                   = var.name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"  # CPU units for the task (Fargate requires this)
-  memory                   = "512"
+  cpu                      = var.task_cpu  # CPU units for the task (Fargate requires this)
+  memory                   = var.task_memory
 
   container_definitions = jsonencode([
     {
@@ -68,9 +68,9 @@ resource "aws_ecs_service" "this" {
   name            = var.name
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.this.arn
-  desired_count   = 3  # Number of tasks to run
+  desired_count   = var.desired_count  # Number of tasks to run
   launch_type      = "FARGATE"
-#  iam_role = var.service_role_arn
+  iam_role = var.service_role_arn
 
   dynamic "load_balancer" {
     for_each = var.target_group_arn == "" ? toset([]) : toset([1])
@@ -91,8 +91,8 @@ resource "aws_ecs_service" "this" {
 }
 
 resource "aws_appautoscaling_target" "this" {
-  max_capacity       = 12  # Maximum number of tasks
-  min_capacity       = 3   # Minimum number of tasks
+  max_capacity       = var.max_capacity  # Maximum number of tasks
+  min_capacity       = var.min_capacity   # Minimum number of tasks
   resource_id        = "service/${var.ecs_cluster_name}/${aws_ecs_service.this.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"

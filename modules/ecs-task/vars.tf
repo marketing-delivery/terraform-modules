@@ -39,7 +39,6 @@ variable "service_role_arn" {
   
 }
 
-
 variable "target_group_arn" {
   default = ""
 }
@@ -48,10 +47,34 @@ variable "task_security_group_arn" {
   
 }
 
-
 variable "container_port" {
   type = number
   default = 80
+}
+
+variable "task_cpu" {
+  type = number
+  default = 256
+}
+
+variable "task_memory" {
+  type = number
+  default = 512
+}
+
+variable "max_capacity" {
+  type = number
+  default = 3
+}
+
+variable "min_capacity" {
+  type = number
+  default = 1
+}
+
+variable "desired_count" {
+  type = number
+  default = 1
 }
 
 # variable "alb_listener_arn" {
