@@ -93,7 +93,7 @@ locals {
   tags = "${merge(var.tags, { "Module" = "ecs-task/${var.name}" })}"
 }
 
-variable "environment_variables" {
+variable "environment" {
   description = "A map of environment variables to pass to the container"
   type        = map(string)
   default     = {}
