@@ -35,7 +35,7 @@ resource "aws_alb_listener" "https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = var.tls_policy
-  certificate_arn   = data.aws_acm_certificate.this[0].arn
+  certificate_arn   = var.domain != "" ? data.aws_acm_certificate.this[0].arn : null
 
   default_action {
     target_group_arn = aws_alb_target_group.this.id
