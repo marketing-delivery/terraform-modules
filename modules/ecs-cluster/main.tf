@@ -70,7 +70,7 @@ resource "aws_iam_role" "service-role" {
   tags = local.tags
 }
 
-# resource "aws_iam_role_policy_attachment" "ecs_service_policy" {
-#   policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonECSServiceRolePolicy"
-#   role       = aws_iam_role.service-role.name
-# }
+resource "aws_iam_role_policy_attachment" "ecs_service_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSServiceRolePolicy"
+  role       = aws_iam_role.service-role.name
+}
