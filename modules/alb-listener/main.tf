@@ -8,6 +8,14 @@ data "aws_acm_certificate" "this" {
   most_recent = true
 }
 
+# Default certificate for ALB when no custom domain is provided
+data "aws_acm_certificate" "default" {
+  count       = var.domain == "" ? 1 : 0
+  domain      = "*.elb.amazonaws.com"
+  statuses    = ["ISSUED"]
+  most_recent = true
+}
+
 resource "aws_alb_target_group" "this" {
     name        = "${var.name}-tg"
     port        = var.container_port
@@ -35,7 +43,7 @@ resource "aws_alb_listener" "https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = var.tls_policy
-  certificate_arn   = var.domain != "" ? data.aws_acm_certificate.this[0].arn : null
+  certificate_arn   = var.domain != "" ? data.aws_acm_certificate.this[0].arn : data.aws_acm_certificate.default[0].arn
 
   default_action {
     target_group_arn = aws_alb_target_group.this.id
