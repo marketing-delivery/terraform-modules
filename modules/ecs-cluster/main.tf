@@ -55,22 +55,22 @@ resource "aws_ecs_cluster" "this" {
 #   role       = aws_iam_role.task_execution_role.name
 # }
 
-resource "aws_iam_role" "service-role" {
-  name = "${var.name}-service-role"
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [{
-      "Effect" : "Allow",
-      "Principal" : {
-        "Service" : "ecs.amazonaws.com"
-      },
-      "Action" : "sts:AssumeRole"
-    }]
-  })
-  tags = local.tags
-}
+# resource "aws_iam_role" "service-role" {
+#   name = "${var.name}-service-role"
+#   assume_role_policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [{
+#       "Effect" : "Allow",
+#       "Principal" : {
+#         "Service" : "ecs.amazonaws.com"
+#       },
+#       "Action" : "sts:AssumeRole"
+#     }]
+#   })
+#   tags = local.tags
+# }
 
-resource "aws_iam_role_policy_attachment" "ecs_service_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
-  role       = aws_iam_role.service-role.name
-}
+# resource "aws_iam_role_policy_attachment" "ecs_service_policy" {
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+#   role       = aws_iam_role.service-role.name
+# }

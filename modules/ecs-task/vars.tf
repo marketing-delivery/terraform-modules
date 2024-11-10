@@ -35,10 +35,6 @@ variable "health_check_endpoint" {
   
 }
 
-variable "service_role_arn" {
-  
-}
-
 variable "target_group_arn" {
   default = ""
 }
