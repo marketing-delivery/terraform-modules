@@ -63,7 +63,6 @@ resource "aws_ecs_service" "this" {
   task_definition = aws_ecs_task_definition.this.arn
   desired_count   = var.desired_count  # Number of tasks to run
   launch_type      = "FARGATE"
-  iam_role = var.service_role_arn
 
   dynamic "load_balancer" {
     for_each = var.target_group_arn == "" ? toset([]) : toset([1])
