@@ -9,7 +9,3 @@ output "cluster_name" {
 # output "task_execution_role_arn" {
 #   value = aws_iam_role.task_execution_role.arn
 # }
-
-output "service_role_arn" {
-  value = aws_iam_role.service-role.arn
-}
