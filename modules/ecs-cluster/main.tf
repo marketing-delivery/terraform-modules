@@ -30,30 +30,30 @@ resource "aws_ecs_cluster" "this" {
   tags = local.tags
 }
 
-resource "aws_iam_role" "task_execution_role" {
-  name = "${var.name}-task-execution-role"
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [{
-      "Effect" : "Allow",
-      "Principal" : {
-        "Service" : "ecs-tasks.amazonaws.com"
-      },
-      "Action" : "sts:AssumeRole"
-    }]
-  })
-  tags = local.tags
-}
+# resource "aws_iam_role" "task_execution_role" {
+#   name = "${var.name}-task-execution-role"
+#   assume_role_policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [{
+#       "Effect" : "Allow",
+#       "Principal" : {
+#         "Service" : "ecs-tasks.amazonaws.com"
+#       },
+#       "Action" : "sts:AssumeRole"
+#     }]
+#   })
+#   tags = local.tags
+# }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  role       = aws_iam_role.task_execution_role.name
-}
+# resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+#   role       = aws_iam_role.task_execution_role.name
+# }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_cloudwatch" {
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-  role       = aws_iam_role.task_execution_role.name
-}
+# resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_cloudwatch" {
+#   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+#   role       = aws_iam_role.task_execution_role.name
+# }
 
 resource "aws_iam_role" "service-role" {
   name = "${var.name}-service-role"
