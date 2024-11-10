@@ -35,14 +35,19 @@ resource "aws_alb_listener" "https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = var.tls_policy
-  certificate_arn   = var.domain != "" ? data.aws_acm_certificate.this[0].arn : null
-
+  
   default_action {
     target_group_arn = aws_alb_target_group.this.id
     type             = "forward"
   }
 
   tags = local.tags
+}
+
+resource "aws_alb_listener_certificate" "this" {
+  count       = var.domain != "" ? 1 : 0
+  listener_arn = aws_alb_listener.https.arn
+  certificate_arn = data.aws_acm_certificate.this[0].arn
 }
 
 resource "aws_lb_listener" "http_to_https_redirect" {
