@@ -18,10 +18,10 @@ resource "aws_route53_record" "cert_validation" {
   }
 
   allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
+  name            = lookup(each.value, "name", null)
+  records         = [lookup(each.value, "record", null)]
   ttl             = 60
-  type            = each.value.type
+  type            = lookup(each.value, "type", null)
   zone_id         = var.route53_zone_id
 }
 
