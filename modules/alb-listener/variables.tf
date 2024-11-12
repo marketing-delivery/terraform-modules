@@ -32,5 +32,5 @@ variable "certificate_arn" {
 }
 
 locals {
-  tags = "${merge(var.tags, { "Module" = "alb/${var.domain}" })}"
+  tags = "${merge(var.tags, { "Module" = "alb/${var.name}" })}"
 }
