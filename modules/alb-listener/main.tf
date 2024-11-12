@@ -1,13 +1,5 @@
 # lb listener (https)
 
-# certificate
-data "aws_acm_certificate" "this" {
-  count       = var.domain != "" ? 1 : 0
-  domain      = var.domain
-  statuses    = ["ISSUED", "PENDING_VALIDATION"]
-  most_recent = true
-}
-
 resource "aws_alb_target_group" "this" {
     name        = "${var.name}-tg"
     port        = var.container_port
@@ -35,7 +27,7 @@ resource "aws_alb_listener" "https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = var.tls_policy
-  certificate_arn = data.aws_acm_certificate.this[0].arn
+  certificate_arn   = var.certificate_arn
   
   default_action {
     target_group_arn = aws_alb_target_group.this.id
@@ -44,6 +36,7 @@ resource "aws_alb_listener" "https" {
 
   tags = local.tags
 }
+
 
 resource "aws_lb_listener" "http_to_https_redirect" {
   load_balancer_arn = var.alb_arn

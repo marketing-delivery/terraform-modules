@@ -4,9 +4,6 @@ variable "name" {
 variable "vpc_id" {
 }
 
-variable "domain" {
-}
-
 variable "alb_arn" {
   
 }
@@ -28,6 +25,10 @@ variable "tls_policy" {
 variable "tags" {
   description = "tags applied to the resources"
   default = {}
+}
+
+variable "certificate_arn" {
+  
 }
 
 locals {
