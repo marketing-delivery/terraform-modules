@@ -9,9 +9,18 @@ resource "aws_acm_certificate" "this" {
 }
 
 # Use a `null_resource` to trigger the certificate's validation once its options are populated.
-resource "null_resource" "certificate_delay" {
+#resource "null_resource" "certificate_delay" {
+#  depends_on = [aws_acm_certificate.this]
+#}
+
+data "aws_acm_certificate" "this" {
+  domain          = var.domain_name
+  statuses        = ["PENDING_VALIDATION"]
+
+  # Ensure this data lookup waits until the certificate is created
   depends_on = [aws_acm_certificate.this]
 }
+
 
 
 resource "aws_route53_record" "cert_validation" {
