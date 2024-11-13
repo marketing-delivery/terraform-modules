@@ -33,7 +33,7 @@ resource "aws_route53_record" "cert_validation" {
   }
 
   # Adding dependency to ensure domain validation options are created
-  depends_on       = [null_resource.certificate_delay]
+  depends_on       = [data.aws_acm_certificate.this]
 
   allow_overwrite  = true
   name             = each.value.name
