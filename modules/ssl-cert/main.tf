@@ -8,6 +8,11 @@ data "aws_route53_zone" "example" {
   private_zone = false
 }
 
+resource "null_resource" "certificate_delay" {
+  depends_on = [aws_acm_certificate.example]
+}
+
+
 resource "aws_route53_record" "example" {
   for_each = {
     for dvo in aws_acm_certificate.example.domain_validation_options : dvo.domain_name => {
@@ -17,12 +22,13 @@ resource "aws_route53_record" "example" {
     }
   }
 
-  allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  ttl             = 60
-  type            = each.value.type
-  zone_id         = data.aws_route53_zone.example.zone_id
+  depends_on       = [null_resource.certificate_delay]  # Ensures certificate options are available
+  allow_overwrite  = true
+  name             = each.value.name
+  records          = [each.value.record]
+  ttl              = 60
+  type             = each.value.type
+  zone_id          = data.aws_route53_zone.example.zone_id
 }
 
 resource "aws_acm_certificate_validation" "example" {
