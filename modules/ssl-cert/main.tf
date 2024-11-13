@@ -11,7 +11,7 @@ data "aws_route53_zone" "example" {
 resource "time_sleep" "wait_for_cert" {
   depends_on = [aws_acm_certificate.example]
 
-  create_duration = "10s"
+  create_duration = "30s"
 
   triggers = {
     # This will re-run the wait if the certificate ARN changes
