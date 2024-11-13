@@ -9,7 +9,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "route53_zone_id" {
-  description = "The ID of the Route53 hosted zone where DNS validation records will be created"
+variable "registered_domain" {
   type        = string
+  description = "The registered domain name for Route53 zone lookup"
 } 
