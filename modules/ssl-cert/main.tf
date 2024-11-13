@@ -8,10 +8,16 @@ data "aws_route53_zone" "example" {
   private_zone = false
 }
 
-resource "null_resource" "certificate_delay" {
+resource "time_sleep" "wait_for_cert" {
   depends_on = [aws_acm_certificate.example]
-}
 
+  create_duration = "10s"
+
+  triggers = {
+    # This will re-run the wait if the certificate ARN changes
+    certificate_arn = aws_acm_certificate.example.arn
+  }
+}
 
 resource "aws_route53_record" "example" {
   for_each = {
@@ -22,7 +28,7 @@ resource "aws_route53_record" "example" {
     }
   }
 
-  depends_on       = [null_resource.certificate_delay]  # Ensures certificate options are available
+  depends_on       = [time_sleep.wait_for_cert]
   allow_overwrite  = true
   name             = each.value.name
   records          = [each.value.record]
