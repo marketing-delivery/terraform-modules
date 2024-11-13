@@ -21,25 +21,18 @@ resource "aws_alb_target_group" "this" {
     tags = local.tags
 }
 
-resource "aws_acm_certificate_validation" "this" {
-  certificate_arn         = var.certificate_arn
-  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
-}
-
 # Redirect all traffic from the ALB to the target group
 resource "aws_alb_listener" "https" {
   load_balancer_arn = var.alb_arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = var.tls_policy
-  certificate_arn   = aws_acm_certificate_validation.this.certificate_arn
+  certificate_arn   = var.certificate_arn
   
   default_action {
     target_group_arn = aws_alb_target_group.this.id
     type             = "forward"
   }
-
-  depends_on       = [aws_acm_certificate_validation.this]
 
   tags = local.tags
 }
