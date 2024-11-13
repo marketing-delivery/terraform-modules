@@ -41,3 +41,16 @@ resource "aws_acm_certificate_validation" "example" {
   certificate_arn         = aws_acm_certificate.example.arn
   validation_record_fqdns = [for record in aws_route53_record.example : record.fqdn]
 }
+
+resource "null_resource" "log_certificate_status" {
+  depends_on = [aws_acm_certificate_validation.example]
+
+  provisioner "local-exec" {
+    command = "echo 'Certificate Status: ${aws_acm_certificate.example.status}'"
+  }
+
+  triggers = {
+    # This will re-run the logging if the certificate status changes
+    certificate_status = aws_acm_certificate.example.status
+  }
+}
