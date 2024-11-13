@@ -8,12 +8,6 @@ resource "aws_acm_certificate" "this" {
   }
 }
 
-data "aws_acm_certificate" "this" {
-  domain     = var.domain_name
-  statuses   = ["PENDING_VALIDATION"]
-  depends_on = [aws_acm_certificate.this]
-}
-
 # Add the missing Route53 record resource for certificate validation
 resource "aws_route53_record" "cert_validation" {
   for_each = {
