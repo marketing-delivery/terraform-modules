@@ -25,23 +25,21 @@ data "aws_acm_certificate" "this" {
 
 resource "aws_route53_record" "cert_validation" {
   for_each = {
-    for dvo in aws_acm_certificate.this.domain_validation_options : dvo.domain_name => {
+    for dvo in data.aws_acm_certificate.this.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
     }
   }
 
-  # Adding dependency to ensure domain validation options are created
-  depends_on       = [data.aws_acm_certificate.this]
-
-  allow_overwrite  = true
-  name             = each.value.name
-  records          = [each.value.record]
-  ttl              = 60
-  type             = each.value.type
-  zone_id          = var.route53_zone_id
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = var.route53_zone_id
 }
+
 
 resource "aws_acm_certificate_validation" "this" {
   certificate_arn         = aws_acm_certificate.this.arn
