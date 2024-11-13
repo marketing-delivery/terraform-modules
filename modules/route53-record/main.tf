@@ -8,6 +8,12 @@ resource "aws_acm_certificate" "this" {
   }
 }
 
+# Use a `null_resource` to trigger the certificate's validation once its options are populated.
+resource "null_resource" "certificate_delay" {
+  depends_on = [aws_acm_certificate.this]
+}
+
+
 resource "aws_route53_record" "cert_validation" {
   for_each = {
     for dvo in aws_acm_certificate.this.domain_validation_options : dvo.domain_name => {
@@ -17,12 +23,15 @@ resource "aws_route53_record" "cert_validation" {
     }
   }
 
-  allow_overwrite = true
-  name            = lookup(each.value, "name", null)
-  records         = [lookup(each.value, "record", null)]
-  ttl             = 60
-  type            = lookup(each.value, "type", null)
-  zone_id         = var.route53_zone_id
+  # Adding dependency to ensure domain validation options are created
+  depends_on       = [null_resource.certificate_delay]
+
+  allow_overwrite  = true
+  name             = each.value.name
+  records          = [each.value.record]
+  ttl              = 60
+  type             = each.value.type
+  zone_id          = var.route53_zone_id
 }
 
 resource "aws_acm_certificate_validation" "this" {
