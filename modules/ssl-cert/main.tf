@@ -11,7 +11,7 @@ data "aws_route53_zone" "example" {
 resource "time_sleep" "wait_for_cert" {
   depends_on = [aws_acm_certificate.example]
 
-  create_duration = "60s"
+  create_duration = "90s"
 
   triggers = {
     # This will re-run the wait if the certificate ARN changes
@@ -28,7 +28,10 @@ resource "aws_route53_record" "example" {
     }
   }
 
-  depends_on       = [time_sleep.wait_for_cert]
+  depends_on = [
+    time_sleep.wait_for_cert,
+    aws_acm_certificate.example
+  ]
   allow_overwrite  = true
   name             = each.value.name
   records          = [each.value.record]
