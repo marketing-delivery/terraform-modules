@@ -40,11 +40,13 @@ resource "aws_iam_policy" "ecr_pull_policy" {
       {
         Effect = "Allow"
         Action = [
-          "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability"
         ]
-        Resource = var.ecr_repository_arns
+        Resource = [
+          "arn:aws:ecr:eu-west-2:767398122598:repository/*"
+        ]
       }
     ]
   })

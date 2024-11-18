@@ -7,8 +7,3 @@ variable "name" {
 variable "tags" {
   description = "tags applied to the resources"
 }
-
-variable "ecr_repository_arns" {
-  description = "List of ECR repository ARNs"
-  type        = list(string)
-}
