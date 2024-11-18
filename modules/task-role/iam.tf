@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "ecr_pull_policy" {
           "ecr:BatchGetImage",
           "ecr:BatchCheckLayerAvailability"
         ]
-        Resource = [var.ecr_repository_arn]
+        Resource = var.ecr_repository_arns
       }
     ]
   })

@@ -92,6 +92,11 @@ variable "desired_count" {
 #   description = "ARN of the ACM certificate for HTTPS"
 # }
 
+variable "ecr_repository_arn" {
+  description = "ARN of the ECR repository"
+  type        = string
+}
+
 locals {
   tags = "${merge(var.tags, { "Module" = "ecs-task/${var.name}" })}"
 }

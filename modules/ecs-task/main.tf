@@ -51,6 +51,7 @@ resource "aws_ecs_task_definition" "this" {
   ])
   
   execution_role_arn = var.task_execution_role_arn
+  task_role_arn      = var.task_execution_role_arn  # Using same role for task execution and task role
   
   #task_role_arn      = 
   tags = local.tags

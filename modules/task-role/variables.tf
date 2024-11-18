@@ -8,7 +8,7 @@ variable "tags" {
   description = "tags applied to the resources"
 }
 
-variable "ecr_repository_arn" {
-  description = "ARN of the ECR repository"
-  type        = string
+variable "ecr_repository_arns" {
+  description = "List of ECR repository ARNs"
+  type        = list(string)
 }
