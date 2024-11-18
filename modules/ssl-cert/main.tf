@@ -9,17 +9,18 @@ data "aws_route53_zone" "example" {
 }
 
 resource "time_sleep" "wait_for_cert" {
+  count = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
   depends_on = [aws_acm_certificate.example]
 
   create_duration = "90s"
 
   triggers = {
-    # This will re-run the wait if the certificate ARN changes
     certificate_arn = aws_acm_certificate.example.arn
   }
 }
 
 resource "aws_route53_record" "example" {
+  count = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
   depends_on = [
     time_sleep.wait_for_cert,
     aws_acm_certificate.example
@@ -34,6 +35,7 @@ resource "aws_route53_record" "example" {
 }
 
 resource "aws_acm_certificate_validation" "example" {
+  count                   = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
   certificate_arn         = aws_acm_certificate.example.arn
-  validation_record_fqdns = [aws_route53_record.example.fqdn]
+  validation_record_fqdns = [aws_route53_record.example[0].fqdn]
 }
