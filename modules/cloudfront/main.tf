@@ -122,6 +122,21 @@ resource "aws_s3_bucket_policy" "this" {
         },
         "Action": "s3:GetObject",
         "Resource": "${var.bucket_arn}/*"
+      },
+      {
+        "Sid": "AllowSSLRequestsOnly",
+        "Effect": "Deny",
+        "Principal": "*",
+        "Action": "s3:*",
+        "Resource": [
+          var.bucket_arn,
+          "${var.bucket_arn}/*"
+        ],
+        "Condition": {
+          "Bool": {
+            "aws:SecureTransport": "false"
+          }
+        }
       }
     ]
   })
