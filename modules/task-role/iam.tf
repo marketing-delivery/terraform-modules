@@ -23,9 +23,9 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_cloudwatch"
   role       = aws_iam_role.task_execution_role.name
 }
 
-resource "aws_iam_role_policy" "ecr_pull_policy" {
+resource "aws_iam_policy" "ecr_pull_policy" {
   name = "ecr-pull-policy"
-  role = aws_iam_role.task_execution_role.id
+  description = "Policy for ECR pull access"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -48,4 +48,9 @@ resource "aws_iam_role_policy" "ecr_pull_policy" {
       }
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "ecr_pull_policy_attachment" {
+  policy_arn = aws_iam_policy.ecr_pull_policy.arn
+  role       = aws_iam_role.task_execution_role.name
 }
