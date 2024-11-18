@@ -79,8 +79,8 @@ resource "aws_cloudfront_distribution" "this" {
   viewer_certificate {
     acm_certificate_arn = local.certificate_arn
     cloudfront_default_certificate = local.certificate_arn == "" ? true : false
-    ssl_support_method  = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method  = local.certificate_arn == "" ? null : "sni-only"
+    minimum_protocol_version = local.certificate_arn == "" ? null : "TLSv1.2_2021"
   }
 
   restrictions {
