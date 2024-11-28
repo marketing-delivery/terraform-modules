@@ -1,11 +1,18 @@
 terraform {
   required_providers {
     aws = {
-      source                = "hashicorp/aws"
-      version               = "~> 5.32.1"
-      configuration_aliases = ["aws.virginia"]
+      source  = "hashicorp/aws"
+      version = "~> 5.32.1"
     }
   }
+
+  required_version = "~> 1.8.0"
+  backend "s3" {}
+}
+
+provider "aws" {
+  alias  = "virginia"
+  region = "us-east-1"
 }
 
 # If a domain is specified then check for it's certificate
