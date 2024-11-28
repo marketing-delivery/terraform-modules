@@ -1,7 +1,7 @@
 resource "aws_kms_key" "this" {
   description             = "KMS ECS key"
   deletion_window_in_days = 7
-  tags = local.tags
+  tags                    = local.tags
 }
 
 resource "aws_cloudwatch_log_group" "this" {
@@ -13,7 +13,7 @@ resource "aws_cloudwatch_log_group" "this" {
 resource "aws_ecs_cluster" "this" {
   name = var.name
   setting {
-    name = "containerInsights"
+    name  = "containerInsights"
     value = "enabled"
   }
   configuration {

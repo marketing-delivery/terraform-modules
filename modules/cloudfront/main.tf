@@ -1,9 +1,9 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.32.1"
-      configuration_aliases = [ aws.virginia ]
+      source                = "hashicorp/aws"
+      version               = "~> 5.77.0"
+      configuration_aliases = [aws.virginia]
     }
   }
 }
@@ -23,7 +23,7 @@ resource "aws_cloudfront_origin_access_identity" "cloudfront_oai" {
 
 locals {
   certificate_arn = var.domain != "" ? data.aws_acm_certificate.this[0].arn : ""
-  aliases = var.domain != "" ? [var.domain] : []
+  aliases         = var.domain != "" ? [var.domain] : []
 }
 
 # Define the CloudFront distribution
@@ -47,13 +47,13 @@ resource "aws_cloudfront_distribution" "this" {
   aliases = local.aliases
 
   default_cache_behavior {
-    allowed_methods      = ["GET", "HEAD", "OPTIONS"]
-    cached_methods       = ["GET", "HEAD"]
-    target_origin_id     = "S3-Website"
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "S3-Website"
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl              = 0
-    default_ttl          = 3600
-    max_ttl              = 86400
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
 
     response_headers_policy_id = var.response_headers_policy_id
 
@@ -65,7 +65,7 @@ resource "aws_cloudfront_distribution" "this" {
         include_body = false
       }
     }
-    
+
     forwarded_values {
       query_string = false
       cookies {
@@ -77,10 +77,10 @@ resource "aws_cloudfront_distribution" "this" {
   price_class = "PriceClass_100"
 
   viewer_certificate {
-    acm_certificate_arn = local.certificate_arn
+    acm_certificate_arn            = local.certificate_arn
     cloudfront_default_certificate = local.certificate_arn == "" ? true : false
-    ssl_support_method  = local.certificate_arn == "" ? null : "sni-only"
-    minimum_protocol_version = local.certificate_arn == "" ? null : "TLSv1.2_2021"
+    ssl_support_method             = local.certificate_arn == "" ? null : "sni-only"
+    minimum_protocol_version       = local.certificate_arn == "" ? null : "TLSv1.2_2021"
   }
 
   restrictions {
@@ -113,28 +113,28 @@ resource "aws_s3_bucket_policy" "this" {
   bucket = var.bucket_id
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Principal": {
-          "AWS": aws_cloudfront_origin_access_identity.cloudfront_oai.iam_arn
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : aws_cloudfront_origin_access_identity.cloudfront_oai.iam_arn
         },
-        "Action": "s3:GetObject",
-        "Resource": "${var.bucket_arn}/*"
+        "Action" : "s3:GetObject",
+        "Resource" : "${var.bucket_arn}/*"
       },
       {
-        "Sid": "AllowSSLRequestsOnly",
-        "Effect": "Deny",
-        "Principal": "*",
-        "Action": "s3:*",
-        "Resource": [
+        "Sid" : "AllowSSLRequestsOnly",
+        "Effect" : "Deny",
+        "Principal" : "*",
+        "Action" : "s3:*",
+        "Resource" : [
           var.bucket_arn,
           "${var.bucket_arn}/*"
         ],
-        "Condition": {
-          "Bool": {
-            "aws:SecureTransport": "false"
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
           }
         }
       }

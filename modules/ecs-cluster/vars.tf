@@ -14,5 +14,5 @@ variable "log_retention_days" {
 }
 
 locals {
-  tags = "${merge(var.tags, { "Module" = "ecs-cluster/${var.name}" })}"
+  tags = merge(var.tags, { "Module" = "ecs-cluster/${var.name}" })
 }

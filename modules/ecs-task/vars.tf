@@ -37,7 +37,7 @@ variable "health_check_endpoint" {
 
 variable "target_group_arn" {
   description = "ARN of the target group for the task"
-  default = ""
+  default     = ""
 }
 
 variable "task_security_group_arn" {
@@ -45,39 +45,39 @@ variable "task_security_group_arn" {
 }
 
 variable "container_port" {
-  type = number
+  type        = number
   description = "Port number for the container"
-  default = 80
+  default     = 80
 }
 
 variable "task_cpu" {
-  type = number
+  type        = number
   description = "CPU units for the task (Fargate requires this) (256 = 0.25 vCPU, 512 = 0.5 vCPU, 1024 = 1 vCPU, 2048 = 2 vCPU)"
-  default = 256
+  default     = 256
 }
 
 variable "task_memory" {
-  type = number
+  type        = number
   description = "Memory for the task (Fargate requires this) (512 = 0.5 GB, 1024 = 1 GB, 2048 = 2 GB, 4096 = 4 GB)"
-  default = 512
+  default     = 512
 }
 
 variable "max_capacity" {
-  type = number
+  type        = number
   description = "Maximum number of tasks to run"
-  default = 3
+  default     = 3
 }
 
 variable "min_capacity" {
-  type = number
+  type        = number
   description = "Minimum number of tasks to run"
-  default = 1
+  default     = 1
 }
 
 variable "desired_count" {
-  type = number
+  type        = number
   description = "Desired number of tasks to run"
-  default = 1
+  default     = 1
 }
 
 # variable "alb_listener_arn" {
@@ -93,7 +93,7 @@ variable "desired_count" {
 # }
 
 locals {
-  tags = "${merge(var.tags, { "Module" = "ecs-task/${var.name}" })}"
+  tags = merge(var.tags, { "Module" = "ecs-task/${var.name}" })
 }
 
 variable "environment" {

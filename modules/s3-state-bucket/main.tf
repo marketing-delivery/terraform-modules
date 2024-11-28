@@ -8,13 +8,13 @@ resource "random_string" "suffix" {
   }
 }
 
-locals{
+locals {
   name = var.has_random_suffix == true ? "${var.name}-${random_string.suffix.id}" : var.name
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket = local.name
-  tags = var.tags
+  bucket        = local.name
+  tags          = var.tags
   force_destroy = true
 }
 
@@ -36,10 +36,10 @@ resource "aws_s3_bucket_policy" "this" {
         ]
       }],
       [{
-        Sid    = "AllowSSLRequestsOnly_uqwhmy"
-        Effect = "Deny"
+        Sid       = "AllowSSLRequestsOnly_uqwhmy"
+        Effect    = "Deny"
         Principal = "*"
-        Action = "s3:*"
+        Action    = "s3:*"
         Resource = [
           "${aws_s3_bucket.this.arn}",
           "${aws_s3_bucket.this.arn}/*"

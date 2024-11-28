@@ -9,7 +9,7 @@ data "aws_route53_zone" "example" {
 }
 
 resource "time_sleep" "wait_for_cert" {
-  count = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
+  count      = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
   depends_on = [aws_acm_certificate.example]
 
   create_duration = "90s"
@@ -25,7 +25,7 @@ resource "aws_route53_record" "example" {
     time_sleep.wait_for_cert,
     aws_acm_certificate.example
   ]
-  
+
   allow_overwrite = true
   zone_id         = data.aws_route53_zone.example.zone_id
   name            = tolist(aws_acm_certificate.example.domain_validation_options)[0].resource_record_name

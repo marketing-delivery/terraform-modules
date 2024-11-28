@@ -67,13 +67,13 @@ variable "vpc_subnets" {
 # }
 
 variable "container_port" {
-  type = number
+  type    = number
   default = 80
 }
 
 variable "tags" {
   description = "tags applied to the resources"
-  default = {}
+  default     = {}
 }
 
 variable "security_group_id" {
@@ -81,5 +81,5 @@ variable "security_group_id" {
 }
 
 locals {
-  tags = "${merge(var.tags, { "Module" = "alb/${var.name}" })}"
+  tags = merge(var.tags, { "Module" = "alb/${var.name}" })
 }

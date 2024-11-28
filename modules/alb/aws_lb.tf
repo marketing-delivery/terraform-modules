@@ -1,10 +1,10 @@
 # lb main definition
 resource "aws_lb" "this" {
-  name                       = var.name
+  name = var.name
   #internal                   = false
   #security_groups            = aws_security_group.alb_sg.id
-  security_groups            = [var.security_group_id]
-  subnets                    = var.vpc_subnets
+  security_groups = [var.security_group_id]
+  subnets         = var.vpc_subnets
   # idle_timeout               = var.idle_timeout
   # enable_deletion_protection = var.enable_deletion_protection
   # drop_invalid_header_fields = var.drop_invalid_header_fields

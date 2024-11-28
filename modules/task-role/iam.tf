@@ -24,7 +24,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_cloudwatch"
 }
 
 resource "aws_iam_policy" "ecr_pull_policy" {
-  name = "ecr-pull-policy"
+  name        = "ecr-pull-policy"
   description = "Policy for ECR pull access"
 
   policy = jsonencode({

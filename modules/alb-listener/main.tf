@@ -1,24 +1,24 @@
 # lb listener (https)
 
 resource "aws_alb_target_group" "this" {
-    name        = "${var.name}-tg"
-    port        = var.container_port
-    protocol    = "HTTP"
-    vpc_id      = var.vpc_id
-    target_type = "ip"
+  name        = "${var.name}-tg"
+  port        = var.container_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
 
-    health_check {
-        healthy_threshold   = "3"
-        interval            = "30"
-        protocol            = "HTTP"
-        #matcher             = "200"
-        timeout             = "3"
-        port                = var.container_port
-        path                = var.health_check_path
-        unhealthy_threshold = "2"
-    }
+  health_check {
+    healthy_threshold = "3"
+    interval          = "30"
+    protocol          = "HTTP"
+    #matcher             = "200"
+    timeout             = "3"
+    port                = var.container_port
+    path                = var.health_check_path
+    unhealthy_threshold = "2"
+  }
 
-    tags = local.tags
+  tags = local.tags
 }
 
 # Redirect all traffic from the ALB to the target group
@@ -28,7 +28,7 @@ resource "aws_alb_listener" "https" {
   protocol          = "HTTPS"
   ssl_policy        = var.tls_policy
   certificate_arn   = var.certificate_arn
-  
+
   default_action {
     target_group_arn = aws_alb_target_group.this.id
     type             = "forward"
@@ -44,14 +44,14 @@ resource "aws_lb_listener" "http_to_https_redirect" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "redirect"
+    type = "redirect"
     redirect {
-      port             = "443"
-      protocol         = "HTTPS"
-      status_code      = "HTTP_301"
-      query            = "#{query}"
-      host             = "#{host}"
-      path             = "/#{path}"
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      query       = "#{query}"
+      host        = "#{host}"
+      path        = "/#{path}"
     }
   }
 

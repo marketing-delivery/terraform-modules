@@ -8,13 +8,13 @@ resource "random_string" "suffix" {
   }
 }
 
-locals{
+locals {
   name = var.has_random_suffix == true ? "${var.name}-${random_string.suffix.id}" : var.name
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket = local.name
-  tags = var.tags
+  bucket        = local.name
+  tags          = var.tags
   force_destroy = true
 }
 
