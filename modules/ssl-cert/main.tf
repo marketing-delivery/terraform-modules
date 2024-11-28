@@ -23,7 +23,7 @@ resource "time_sleep" "wait_for_cert" {
 
 resource "aws_route53_record" "example" {
   provider = aws.regional
-  count = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
+  count    = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
   depends_on = [
     time_sleep.wait_for_cert,
     aws_acm_certificate.example
