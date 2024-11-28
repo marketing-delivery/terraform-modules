@@ -1,9 +1,11 @@
 resource "aws_acm_certificate" "example" {
+  provider          = aws.regional
   domain_name       = lower(var.domain_name)
   validation_method = "DNS"
 }
 
 data "aws_route53_zone" "example" {
+  provider     = aws.regional
   name         = var.registered_domain
   private_zone = false
 }
@@ -20,6 +22,7 @@ resource "time_sleep" "wait_for_cert" {
 }
 
 resource "aws_route53_record" "example" {
+  provider = aws.regional
   count = aws_acm_certificate.example.status == "ISSUED" ? 0 : 1
   depends_on = [
     time_sleep.wait_for_cert,
