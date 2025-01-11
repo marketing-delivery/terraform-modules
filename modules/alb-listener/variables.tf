@@ -1,11 +1,18 @@
 variable "name" {
+  type    = string
 }
 
 variable "vpc_id" {
+  type    = string
 }
 
 variable "alb_arn" {
+  type    = string
+}
 
+variable "is_https" {
+  type    = bool
+  default = true
 }
 
 variable "container_port" {
@@ -28,7 +35,8 @@ variable "tags" {
 }
 
 variable "certificate_arn" {
-
+  type    = string
+  default = null
 }
 
 locals {
