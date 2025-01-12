@@ -18,8 +18,12 @@ variable "image_uri" {
   description = "URI of the container image"
 }
 
-variable "task_execution_role_arn" {
-  description = "ARN of the task execution role"
+variable "execution_role_arn" {
+  description = "ARN of the execution role"
+}
+
+variable "task_role_arn" {
+  description = "ARN of the task role"
 }
 
 variable "subnets" {
