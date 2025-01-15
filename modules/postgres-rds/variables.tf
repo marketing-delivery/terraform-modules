@@ -1,5 +1,5 @@
 variable "identifier" {
-  type    = string
+  type        = string
   description = "The identifier for the rds instance and the secret"
 }
 
@@ -17,8 +17,8 @@ variable "username" {
 }
 
 variable "instance_class" {
-  type    = string
-  default = "db.t3.micro"
+  type        = string
+  default     = "db.t3.micro"
   description = "The instance class to use for the database"
 }
 

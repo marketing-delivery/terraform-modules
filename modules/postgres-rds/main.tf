@@ -6,10 +6,10 @@ module "postgres_rds" {
   # Postgres specific settings
   engine               = "postgres"
   engine_version       = "15"
-  family              = "postgres15"
+  family               = "postgres15"
   major_engine_version = "15"
-  instance_class      = var.instance_class
-  allocated_storage   = var.allocated_storage
+  instance_class       = var.instance_class
+  allocated_storage    = var.allocated_storage
 
   # Database settings
   db_name  = var.db_name
@@ -34,7 +34,7 @@ module "postgres_rds" {
 
   # Security settings
   storage_encrypted = true
-  multi_az         = var.multi_az
+  multi_az          = var.multi_az
   
   # Development settings (adjust for production)
   deletion_protection = var.deletion_protection
