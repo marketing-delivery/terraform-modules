@@ -28,6 +28,12 @@ variable "allocated_storage" {
   description = "The amount of storage to allocate for the database in GB"
 }
 
+variable "max_allocated_storage" {
+  description = "Maximum storage allocation limit for RDS instance (in GB)"
+  type        = number
+  default     = 100
+}
+
 variable "subnet_ids" {
   type        = list(string)
   description = "The subnets to associate with the database"

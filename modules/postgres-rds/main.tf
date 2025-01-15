@@ -4,12 +4,13 @@ module "postgres_rds" {
   identifier = var.identifier
 
   # Postgres specific settings
-  engine               = "postgres"
-  engine_version       = "15"
-  family               = "postgres15"
-  major_engine_version = "15"
-  instance_class       = var.instance_class
-  allocated_storage    = var.allocated_storage
+  engine                = "postgres"
+  engine_version        = "15"
+  family                = "postgres15"
+  major_engine_version  = "15"
+  instance_class        = var.instance_class
+  allocated_storage     = var.allocated_storage
+  max_allocated_storage = var.max_allocated_storage
 
   # Database settings
   db_name  = var.db_name
