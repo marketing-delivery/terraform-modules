@@ -28,7 +28,6 @@ module "postgres_rds" {
   maintenance_window      = var.maintenance_window
   backup_window           = var.backup_window
   backup_retention_period = var.backup_retention_period
-  
 
   # Monitoring
   monitoring_interval    = "30"
