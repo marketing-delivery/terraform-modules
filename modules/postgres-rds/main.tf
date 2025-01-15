@@ -35,7 +35,7 @@ module "postgres_rds" {
   # Security settings
   storage_encrypted = true
   multi_az          = var.multi_az
-  
+
   # Development settings (adjust for production)
   deletion_protection = var.deletion_protection
   skip_final_snapshot = var.skip_final_snapshot

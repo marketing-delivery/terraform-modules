@@ -1,13 +1,13 @@
 variable "name" {
-  type    = string
+  type = string
 }
 
 variable "vpc_id" {
-  type    = string
+  type = string
 }
 
 variable "alb_arn" {
-  type    = string
+  type = string
 }
 
 variable "is_https" {

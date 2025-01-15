@@ -4,7 +4,7 @@ variable "identifier" {
 }
 
 variable "db_name" {
-  type    = string
+  type = string
   validation {
     condition     = can(regex("^[a-zA-Z][a-zA-Z0-9]*$", var.db_name))
     error_message = "The database name must begin with a letter and contain only alphanumeric characters."
@@ -23,36 +23,36 @@ variable "instance_class" {
 }
 
 variable "allocated_storage" {
-  type    = number
-  default = 20
+  type        = number
+  default     = 20
   description = "The amount of storage to allocate for the database in GB"
 }
 
 variable "subnet_ids" {
-  type    = list(string)
+  type        = list(string)
   description = "The subnets to associate with the database"
 }
 
 variable "multi_az" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Whether to enable multi-AZ deployment"
 }
 
 variable "tags" {
-  type    = map(string)
+  type        = map(string)
   description = "The tags to associate with the database"
 }
 
 variable "deletion_protection" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Whether to enable deletion protection"
 }
 
 variable "skip_final_snapshot" {
-  type    = bool
-  default = true
+  type        = bool
+  default     = true
   description = "Whether to skip final snapshot"
 }
 

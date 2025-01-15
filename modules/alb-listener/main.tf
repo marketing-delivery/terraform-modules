@@ -23,7 +23,7 @@ resource "aws_alb_target_group" "this" {
 
 # Redirect all traffic from the ALB to the target group
 resource "aws_alb_listener" "https" {
-  count = var.is_https ? 1 : 0
+  count             = var.is_https ? 1 : 0
   load_balancer_arn = var.alb_arn
   port              = 443
   protocol          = "HTTPS"
@@ -39,7 +39,7 @@ resource "aws_alb_listener" "https" {
 }
 
 resource "aws_alb_listener" "http" {
-  count = var.is_https ? 0 : 1
+  count             = var.is_https ? 0 : 1
   load_balancer_arn = var.alb_arn
   port              = 80
   protocol          = "HTTP"
@@ -53,7 +53,7 @@ resource "aws_alb_listener" "http" {
 }
 
 resource "aws_lb_listener" "http_to_https_redirect" {
-  count = var.is_https ? 1 : 0
+  count             = var.is_https ? 1 : 0
   load_balancer_arn = var.alb_arn
   port              = 80
   protocol          = "HTTP"
