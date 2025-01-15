@@ -25,8 +25,10 @@ module "postgres_rds" {
   vpc_security_group_ids = [aws_security_group.postgres_rds.id]
 
   # Maintenance settings
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
+  maintenance_window      = var.maintenance_window
+  backup_window           = var.backup_window
+  backup_retention_period = var.backup_retention_period
+  
 
   # Monitoring
   monitoring_interval    = "30"
