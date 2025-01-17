@@ -13,6 +13,6 @@ resource "aws_secretsmanager_secret_version" "db_password" {
   secret_string = jsonencode({
     username          = module.postgres_rds.db_instance_username
     password          = random_password.db_password.result
-    connection_string = "Host=${module.postgres_rds.db_instance_address};Database=${var.db_name};Username=${module.postgres_rds.db_instance_username};***"
+    connection_string = "Host=${module.postgres_rds.db_instance_address};Database=${var.db_name};Username=${module.postgres_rds.db_instance_username};Password=${random_password.db_password.result}"
   })
 }
