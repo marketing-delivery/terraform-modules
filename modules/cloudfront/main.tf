@@ -1,7 +1,7 @@
 # If a domain is specified then check for it's certificate
 data "aws_acm_certificate" "this" {
   count       = var.domain != "" ? 1 : 0
-  provider    = aws.virginia
+  provider    = aws.global
   domain      = var.domain
   statuses    = ["ISSUED", "PENDING_VALIDATION"]
   most_recent = true
