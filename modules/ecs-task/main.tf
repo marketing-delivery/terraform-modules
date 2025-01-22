@@ -37,7 +37,11 @@ resource "aws_ecs_task_definition" "this" {
           "value" : "true"
         }
         ],
-      [for k, v in var.environment : { name = k, value = v }])
+        [for k, v in var.environment : { name = k, value = v }]
+      )
+      secrets = [
+        for k, v in var.secrets : { name = k, valueFrom = v }
+      ]
       healthCheck = {
         command = [
           "CMD-SHELL",

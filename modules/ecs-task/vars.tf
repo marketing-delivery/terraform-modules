@@ -105,3 +105,9 @@ variable "environment" {
   type        = map(string)
   default     = {}
 }
+
+variable "secrets" {
+  description = "A map of secrets to pass to the container. The value should be the ARN of the secret including the key/version if required"
+  type        = map(string)
+  default     = {}
+}
