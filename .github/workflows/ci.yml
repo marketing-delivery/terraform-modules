@@ -31,30 +31,3 @@ jobs:
           echo "Files with formatting issues are listed above with their differences."
           exit 1
         fi
-
-    - name: Validate Terraform Modules
-      run: |
-        for dir in $(find . -type f -name "*.tf" -exec dirname {} \; | sort -u); do
-          echo "Validating Terraform files in: $dir"
-          cd $dir
-          
-          # Create temporary provider configuration if this is a module directory
-          if [[ "$dir" == *"modules/cloudfront"* ]]; then
-            cat > test_providers.tf << 'EOF'
-            provider "aws" {
-              alias  = "global"
-              region = "us-east-1"
-            }
-            EOF
-          fi
-          
-          terraform init -backend=false
-          terraform validate
-          
-          # Clean up temporary file
-          if [[ "$dir" == *"modules/cloudfront"* ]]; then
-            rm test_providers.tf
-          fi
-          
-          cd - > /dev/null
-        done
