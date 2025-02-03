@@ -8,4 +8,4 @@ terraform {
       source = "hashicorp/time"
     }
   }
-} 
+}
