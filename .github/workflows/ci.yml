@@ -40,7 +40,12 @@ jobs:
           
           # Create temporary provider configuration if this is a module directory
           if [[ "$dir" == *"modules/cloudfront"* ]]; then
-            echo "provider \"aws\" { alias = \"global\" region = \"us-east-1\" }" > test_providers.tf
+            cat > test_providers.tf << 'EOF'
+            provider "aws" {
+              alias  = "global"
+              region = "us-east-1"
+            }
+            EOF
           fi
           
           terraform init -backend=false
