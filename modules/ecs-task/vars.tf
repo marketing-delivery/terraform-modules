@@ -7,8 +7,13 @@ variable "ecs_cluster_name" {
 }
 
 variable "name" {
-  description = "Name of the task"
-}
+  description = "Name of the ECS task and service"
+  type        = string
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_:]+$", var.name))
+    error_message = "The name value '${var.name}' must contain only alphanumeric characters, hyphens, underscores, and colons."
+  }
+} 
 
 variable "tags" {
   description = "tags applied to the resources"
