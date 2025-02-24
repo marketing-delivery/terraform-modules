@@ -39,6 +39,18 @@ variable "certificate_arn" {
   default = null
 }
 
+variable "allowed_origins" {
+  description = "List of allowed origins for CORS"
+  type        = list(string)
+  default     = []
+}
+
+variable "enable_cors" {
+  description = "Enable CORS support"
+  type        = bool
+  default     = false
+}
+
 locals {
   tags = merge(var.tags, { "Module" = "alb/${var.name}" })
 }

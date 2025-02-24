@@ -1,4 +1,8 @@
 variable "name" {
+  validation {
+    condition     = length(var.name) <= 32
+    error_message = "The name value cannot be longer than 32 characters."
+  }
 }
 
 # variable "internal" {

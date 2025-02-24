@@ -18,6 +18,12 @@ resource "aws_alb_target_group" "this" {
     unhealthy_threshold = "2"
   }
 
+  # Add CORS support
+  stickiness {
+    enabled = false
+    type    = "lb_cookie"
+  }
+
   tags = local.tags
 }
 
@@ -31,12 +37,47 @@ resource "aws_alb_listener" "https" {
   certificate_arn   = var.certificate_arn
 
   default_action {
-    target_group_arn = aws_alb_target_group.this.id
-    type             = "forward"
+    type = var.enable_cors ? "fixed-response" : "forward"
+    
+    dynamic "fixed_response" {
+      for_each = var.enable_cors ? [1] : []
+      content {
+        content_type = "text/plain"
+        message_body = "CORS preflight request"
+        status_code  = "200"
+      }
+    }
+
+    dynamic "forward" {
+      for_each = var.enable_cors ? [] : [1]
+      content {
+        target_group_arn = aws_alb_target_group.this.id
+      }
+    }
   }
 
   tags = local.tags
 }
+
+  # Add a rule to handle actual requests
+resource "aws_lb_listener_rule" "api_cors" {
+    count        = var.is_https && var.enable_cors ? 1 : 0
+    listener_arn = aws_alb_listener.https[0].arn
+    priority     = 100
+
+    action {
+      type             = "forward"
+      target_group_arn = aws_alb_target_group.this.id
+    }
+
+    condition {
+      http_header {
+        http_header_name = "Origin"
+        values          = var.allowed_origins
+      }
+    }
+}
+
 
 resource "aws_alb_listener" "http" {
   count             = var.is_https ? 0 : 1
