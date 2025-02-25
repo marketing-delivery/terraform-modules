@@ -65,6 +65,59 @@ resource "aws_alb_listener" "https_forward" {
   tags = local.tags
 }
 
+# Rule for OPTIONS preflight requests
+resource "aws_lb_listener_rule" "options_preflight" {
+  count        = var.is_https && var.enable_cors ? 1 : 0
+  listener_arn = aws_alb_listener.https_cors[0].arn
+  priority     = 1
+
+  action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      status_code  = "204"
+      message_body = ""
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+
+  condition {
+    http_request_method {
+      values = ["OPTIONS"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "api_forward" {
+  count        = var.is_https && !var.enable_cors ? 1 : 0
+  listener_arn = aws_alb_listener.https_forward[0].arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.this.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+
+  condition {
+    http_request_method {
+      values = ["GET", "POST", "PUT", "DELETE"]
+    }
+  }
+}
+
+
 # Update the listener rule reference to use the CORS listener
 resource "aws_lb_listener_rule" "api_cors" {
   count        = var.is_https && var.enable_cors ? 1 : 0
@@ -80,6 +133,18 @@ resource "aws_lb_listener_rule" "api_cors" {
     http_header {
       http_header_name = "Origin"
       values           = var.allowed_origins
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+
+  condition {
+    http_request_method {
+      values = ["GET", "POST", "PUT", "DELETE"]
     }
   }
 }
