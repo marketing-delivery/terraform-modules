@@ -59,25 +59,24 @@ resource "aws_alb_listener" "https" {
   tags = local.tags
 }
 
-  # Add a rule to handle actual requests
+# Add a rule to handle actual requests
 resource "aws_lb_listener_rule" "api_cors" {
-    count        = var.is_https && var.enable_cors ? 1 : 0
-    listener_arn = aws_alb_listener.https[0].arn
-    priority     = 100
+  count        = var.is_https && var.enable_cors ? 1 : 0
+  listener_arn = aws_alb_listener.https[0].arn
+  priority     = 100
 
-    action {
-      type             = "forward"
-      target_group_arn = aws_alb_target_group.this.id
-    }
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.this.id
+  }
 
-    condition {
-      http_header {
-        http_header_name = "Origin"
-        values          = var.allowed_origins
-      }
+  condition {
+    http_header {
+      http_header_name = "Origin"
+      values           = var.allowed_origins
     }
+  }
 }
-
 
 resource "aws_alb_listener" "http" {
   count             = var.is_https ? 0 : 1
