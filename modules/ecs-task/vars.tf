@@ -13,7 +13,7 @@ variable "name" {
     condition     = can(regex("^[a-zA-Z0-9-_:]+$", var.name))
     error_message = "The name value '${var.name}' must contain only alphanumeric characters, hyphens, underscores, and colons."
   }
-} 
+}
 
 variable "tags" {
   description = "tags applied to the resources"
