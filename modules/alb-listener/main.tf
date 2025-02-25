@@ -27,9 +27,9 @@ resource "aws_alb_target_group" "this" {
   tags = local.tags
 }
 
-# Redirect all traffic from the ALB to the target group
-resource "aws_alb_listener" "https" {
-  count             = var.is_https ? 1 : 0
+# HTTPS listener for CORS preflight requests
+resource "aws_alb_listener" "https_cors" {
+  count             = var.is_https && var.enable_cors ? 1 : 0
   load_balancer_arn = var.alb_arn
   port              = 443
   protocol          = "HTTPS"
@@ -37,32 +37,38 @@ resource "aws_alb_listener" "https" {
   certificate_arn   = var.certificate_arn
 
   default_action {
-    type = var.enable_cors ? "fixed-response" : "forward"
-    
-    dynamic "fixed_response" {
-      for_each = var.enable_cors ? [1] : []
-      content {
-        content_type = "text/plain"
-        message_body = "CORS preflight request"
-        status_code  = "200"
-      }
-    }
-
-    dynamic "forward" {
-      for_each = var.enable_cors ? [] : [1]
-      content {
-        target_group_arn = aws_alb_target_group.this.id
-      }
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "CORS preflight request"
+      status_code  = "200"
     }
   }
 
   tags = local.tags
 }
 
-# Add a rule to handle actual requests
+# HTTPS listener for regular traffic
+resource "aws_alb_listener" "https_forward" {
+  count             = var.is_https && !var.enable_cors ? 1 : 0
+  load_balancer_arn = var.alb_arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = var.tls_policy
+  certificate_arn   = var.certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.this.id
+  }
+
+  tags = local.tags
+}
+
+# Update the listener rule reference to use the CORS listener
 resource "aws_lb_listener_rule" "api_cors" {
   count        = var.is_https && var.enable_cors ? 1 : 0
-  listener_arn = aws_alb_listener.https[0].arn
+  listener_arn = aws_alb_listener.https_cors[0].arn
   priority     = 100
 
   action {
