@@ -130,13 +130,6 @@ resource "aws_lb_listener_rule" "api_cors" {
   }
 
   condition {
-    http_header {
-      http_header_name = "Origin"
-      values           = var.allowed_origins
-    }
-  }
-
-  condition {
     path_pattern {
       values = ["/*"]
     }
@@ -144,7 +137,7 @@ resource "aws_lb_listener_rule" "api_cors" {
 
   condition {
     http_request_method {
-      values = ["GET", "POST", "PUT", "DELETE"]
+      values = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     }
   }
 }
