@@ -18,17 +18,11 @@ resource "aws_alb_target_group" "this" {
     unhealthy_threshold = "2"
   }
 
-  # Add CORS support
-  stickiness {
-    enabled = false
-    type    = "lb_cookie"
-  }
-
   tags = local.tags
 }
 
-# HTTPS listener for regular traffic
-resource "aws_alb_listener" "https_forward" {
+# Redirect all traffic from the ALB to the target group
+resource "aws_alb_listener" "https" {
   count             = var.is_https ? 1 : 0
   load_balancer_arn = var.alb_arn
   port              = 443
@@ -37,8 +31,8 @@ resource "aws_alb_listener" "https_forward" {
   certificate_arn   = var.certificate_arn
 
   default_action {
-    type             = "forward"
     target_group_arn = aws_alb_target_group.this.id
+    type             = "forward"
   }
 
   tags = local.tags
