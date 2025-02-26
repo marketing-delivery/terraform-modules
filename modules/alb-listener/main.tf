@@ -38,6 +38,7 @@ resource "aws_alb_listener" "https_cors" {
 
   default_action {
     type = "fixed-response"
+
     fixed_response {
       content_type = "text/plain"
       message_body = "CORS preflight request"
@@ -117,9 +118,8 @@ resource "aws_lb_listener_rule" "api_forward" {
   }
 }
 
-
-# Update the listener rule reference to use the CORS listener
-resource "aws_lb_listener_rule" "api_cors" {
+# First rule for GET, POST, PUT
+resource "aws_lb_listener_rule" "api_cors_1" {
   count        = var.is_https && var.enable_cors ? 1 : 0
   listener_arn = aws_alb_listener.https_cors[0].arn
   priority     = 100
@@ -137,7 +137,31 @@ resource "aws_lb_listener_rule" "api_cors" {
 
   condition {
     http_request_method {
-      values = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+      values = ["GET", "POST", "PUT"]
+    }
+  }
+}
+
+# Second rule for DELETE and OPTIONS
+resource "aws_lb_listener_rule" "api_cors_2" {
+  count        = var.is_https && var.enable_cors ? 1 : 0
+  listener_arn = aws_alb_listener.https_cors[0].arn
+  priority     = 101
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.this.id
+  }
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+
+  condition {
+    http_request_method {
+      values = ["DELETE", "OPTIONS"]
     }
   }
 }
