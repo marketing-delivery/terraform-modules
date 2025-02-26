@@ -39,11 +39,11 @@ variable "certificate_arn" {
   default = null
 }
 
-variable "allowed_origins" {
-  description = "List of allowed origins for CORS"
-  type        = list(string)
-  default     = []
-}
+#variable "allowed_origins" {
+#  description = "List of allowed origins for CORS"
+#  type        = list(string)
+#  default     = []
+#}
 
 variable "enable_cors" {
   description = "Enable CORS support"
