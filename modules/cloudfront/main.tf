@@ -18,6 +18,8 @@ locals {
 
 # Define the CloudFront distribution
 resource "aws_cloudfront_distribution" "this" {
+  depends_on = [data.aws_acm_certificate.this]
+
   origin {
     domain_name = var.bucket_regional_domain_name
     origin_id   = "S3-Website"
